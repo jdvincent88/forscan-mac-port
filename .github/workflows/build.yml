@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux-core:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0"
+      - run: swift build
+      - run: swift test
+      - run: .build/debug/fordlink setup sim:mache
+
+  macos-app:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - run: swift build
+      - run: swift test
+      - run: scripts/build-app.sh
+      - run: dist/fordlink setup sim:mache
+      - run: ditto -c -k --keepParent dist/FordLink.app dist/FordLink-app.zip && zip -j dist/fordlink-cli.zip dist/fordlink
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FordLink-macOS
+          path: |
+            dist/FordLink-app.zip
+            dist/fordlink-cli.zip
