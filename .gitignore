@@ -1,0 +1,12 @@
+.build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+DerivedData/
+dist/
+.DS_Store
+# Proprietary FORScan installer — never commit it (license + size)
+vendor/
+*.exe
+*.z01
+FORScanSetup*.zip
